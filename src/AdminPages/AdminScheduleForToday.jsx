@@ -1,28 +1,27 @@
-import React, { useContext } from 'react';
-import { Container, Row, Col, Table, Button } from 'react-bootstrap';
-import AppointmentContext from '../AppointmentContext';
+import React, { useContext } from "react";
+import { Container, Row, Col, Table, Button } from "react-bootstrap";
+import AppointmentContext from "../AppointmentContext";
 
 const AdminScheduleForToday = () => {
-  const {
-    appointments,
-    setAppointments
-  } = useContext(AppointmentContext)
+  const { appointments, setAppointments } = useContext(AppointmentContext);
 
   const handleCompleted = (id) => {
-    setAppointments(prevAppointments => prevAppointments.map(prevAppointment => {
-      return prevAppointment.id === id
-        ? {
-          ...prevAppointment,
-          isCompleted: !prevAppointment.isCompleted
-        }
-        : prevAppointment
-    }))
-  }
+    setAppointments((prevAppointments) =>
+      prevAppointments.map((prevAppointment) => {
+        return prevAppointment.id === id
+          ? {
+              ...prevAppointment,
+              isCompleted: !prevAppointment.isCompleted,
+            }
+          : prevAppointment;
+      })
+    );
+  };
 
   const handleConfirmAppointment = (id) => {
     const updatedAppointments = appointments.map((appointment) => {
       if (appointment.id === id) {
-        return { ...appointment, status: 'Confirmed' };
+        return { ...appointment, status: "Confirmed" };
       }
       return appointment;
     });
@@ -30,42 +29,61 @@ const AdminScheduleForToday = () => {
   };
 
   const statusBackground = (appointment) => {
-    let background
+    let background;
     if (appointment.status.toLowerCase() === "confirmed") {
-      background = "fw-bold text-success"
+      background = "fw-bold text-success";
     } else if (appointment.status.toLowerCase() === "cancelled") {
-      background = "fw-bold text-danger"
+      background = "fw-bold text-danger";
     } else if (appointment.status.toLowerCase() === "rescheduled") {
-      background = "fw-bold text-primary"
+      background = "fw-bold text-primary";
     } else {
-      background = "fw-bold text-secondary"
+      background = "fw-bold text-secondary";
     }
 
-    return background
-  }
+    return background;
+  };
 
   const actionBtnElements = (status, isComplete, id) => {
-    let btnElements
+    let btnElements;
     if (status.toLowerCase() === "confirmed" && !isComplete) {
-      btnElements = <Button className='btn-sm' variant='primary' onClick={() => handleCompleted(id)}>Done</Button>
-    } else if (status.toLowerCase() !== "confirmed" && !isComplete && status.toLowerCase() !== "cancelled") {
-      btnElements =
+      btnElements = (
+        <Button
+          className="btn-sm"
+          variant="primary"
+          onClick={() => handleCompleted(id)}
+        >
+          Done
+        </Button>
+      );
+    } else if (
+      status.toLowerCase() !== "confirmed" &&
+      !isComplete &&
+      status.toLowerCase() !== "cancelled"
+    ) {
+      btnElements = (
         <>
-          <Button className='btn-sm btn-primary'>Reschedule</Button> <Button className='btn-sm btn-success' onClick={() => handleConfirmAppointment(id)} >Confirm</Button>
+          <Button className="btn-sm btn-primary">Reschedule</Button>{" "}
+          <Button
+            className="btn-sm btn-success"
+            onClick={() => handleConfirmAppointment(id)}
+          >
+            Confirm
+          </Button>
         </>
+      );
     } else if (isComplete) {
-      btnElements = <h6 className="text-primary">Completed</h6>
+      btnElements = <h6 className="text-primary">Completed</h6>;
     } else {
-      btnElements = <h6 className='text-secondary'>Expired</h6>
+      btnElements = <h6 className="text-secondary">Expired</h6>;
     }
 
-    return btnElements
-  }
+    return btnElements;
+  };
 
   return (
     <Container>
       <Row>
-      <h1 className="text-center my-4">Today's Schedule</h1>
+        <h1 className="text-center my-4">Today's Schedule</h1>
         <Col style={{ height: "400px", overflow: "scroll" }}>
           <Table striped bordered hover>
             <thead>
@@ -80,30 +98,49 @@ const AdminScheduleForToday = () => {
               </tr>
             </thead>
             <tbody>
-              {appointments.filter(appointment => {
-                const currentDate = new Date().toISOString().split('T')[0];
-                return appointment.date === currentDate;
-              })
+              {appointments
+                .filter((appointment) => {
+                  const currentDate = new Date().toISOString().split("T")[0];
+                  return appointment.date === currentDate;
+                })
                 .map((appointment, index) => (
                   <tr key={appointment.id}>
                     <td>{index + 1}</td>
                     <td>{appointment.name}</td>
-                    <td>{new Date(appointment.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</td>
-                    <td>{new Date(`2000-01-01T${appointment.time}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td>
+                    <td>
+                      {new Date(appointment.date).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </td>
+                    <td>
+                      {new Date(
+                        `2000-01-01T${appointment.time}`
+                      ).toLocaleTimeString([], {
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </td>
                     <td>{appointment.service}</td>
-                    <td className={statusBackground(appointment)}>{appointment.status}</td>
-                    <td>{actionBtnElements(appointment.status, appointment.isCompleted, appointment.id)}</td>
+                    <td className={statusBackground(appointment)}>
+                      {appointment.status}
+                    </td>
+                    <td>
+                      {actionBtnElements(
+                        appointment.status,
+                        appointment.isCompleted,
+                        appointment.id
+                      )}
+                    </td>
                   </tr>
                 ))}
             </tbody>
           </Table>
         </Col>
       </Row>
-
     </Container>
   );
 };
 
 export default AdminScheduleForToday;
-
-

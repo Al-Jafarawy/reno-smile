@@ -1,49 +1,62 @@
-import { useContext } from 'react';
-import { Container, Row, Col, Table, Button } from 'react-bootstrap'; // Importing necessary components from React Bootstrap
-import AppointmentContext from '../AppointmentContext';
-import UsersContext from '../UsersContext';
-
+import { useContext } from "react";
+import { Container, Row, Col, Table, Button } from "react-bootstrap"; // Importing necessary components from React Bootstrap
+import AppointmentContext from "../AppointmentContext";
+import UsersContext from "../UsersContext";
 
 const AdminSchedule = () => {
-  const { appointments, setAppointments} = useContext(AppointmentContext)
-  const {selectedUser} = useContext(UsersContext)
+  const { appointments, setAppointments } = useContext(AppointmentContext);
+  const { selectedUser } = useContext(UsersContext);
 
   const handleCompleted = (id) => {
-    setAppointments(prevAppointments => prevAppointments.map(prevAppointment => {
-      return prevAppointment.id === id
-        ? {
-          ...prevAppointment,
-          isCompleted: !prevAppointment.isCompleted
-        }
-        : prevAppointment
-    }))
-  }
+    setAppointments((prevAppointments) =>
+      prevAppointments.map((prevAppointment) => {
+        return prevAppointment.id === id
+          ? {
+              ...prevAppointment,
+              isCompleted: !prevAppointment.isCompleted,
+            }
+          : prevAppointment;
+      })
+    );
+  };
 
   const handleCancelAppointment = (id, appointmentToCancel) => {
     const updatedAppointments = appointments.map((appointment) => {
       if (appointment.id === id) {
         // Call the Send Message API to send an SMS confirmation to the recipient's phone number
-        const apiKey = '344486aa522ca2bc4013ee2fdd24389606100a76';
-        const message = `Hi ${appointmentToCancel.name}, Your appointment on ${new Date(appointmentToCancel.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}, ${new Date(`2000-01-01T${appointmentToCancel.time}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} has been cancelled.
+        const apiKey = "344486aa522ca2bc4013ee2fdd24389606100a76";
+        const message = `Hi ${
+          appointmentToCancel.name
+        }, Your appointment on ${new Date(
+          appointmentToCancel.date
+        ).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })}, ${new Date(
+          `2000-01-01T${appointmentToCancel.time}`
+        ).toLocaleTimeString([], {
+          hour: "numeric",
+          minute: "2-digit",
+        })} has been cancelled.
 
         - Smile Care Dental Clinic`;
         const device = 448; // ID of the device used for sending
         const sim = 1; // Sim slot number for sending message
         const priority = 1; // Send the message as priority
         const url = `https://sms.teamssprogram.com/api/send?key=${apiKey}&phone=${appointmentToCancel.phone}&message=${message}&device=${device}&sim=${sim}&priority=${priority}`;
-  
+
         fetch(url)
-          .then(response => response.json())
-          .then(data => console.log(data))
-          .catch(error => console.error(error));
-  
-        return { ...appointment, status: 'Cancelled' };
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => console.error(error));
+
+        return { ...appointment, status: "Cancelled" };
       }
       return appointment;
     });
     setAppointments(updatedAppointments);
   };
-  
 
   // const handleCancelAppointment = (id, appointment) => {
   //   const updatedAppointments = appointments.map((appointment) => {
@@ -69,19 +82,19 @@ const AdminSchedule = () => {
   // };
 
   const statusBackground = (appointment) => {
-    let background
+    let background;
     if (appointment.status.toLowerCase() === "confirmed") {
-      background = "fw-bold text-success"
+      background = "fw-bold text-success";
     } else if (appointment.status.toLowerCase() === "cancelled") {
-      background = "fw-bold text-danger"
+      background = "fw-bold text-danger";
     } else if (appointment.status.toLowerCase() === "rescheduled") {
-      background = "fw-bold text-primary"
+      background = "fw-bold text-primary";
     } else {
-      background = "fw-bold text-secondary"
+      background = "fw-bold text-secondary";
     }
 
-    return background
-  }
+    return background;
+  };
 
   return (
     <Container fluid>
@@ -101,19 +114,55 @@ const AdminSchedule = () => {
             </thead>
             <tbody>
               {appointments
-                .filter(appointment => !appointment.isCompleted && (appointment.status.toLowerCase() === "confirmed" || appointment.status.toLowerCase() === "cancelled"))
+                .filter(
+                  (appointment) =>
+                    !appointment.isCompleted &&
+                    (appointment.status.toLowerCase() === "confirmed" ||
+                      appointment.status.toLowerCase() === "cancelled")
+                )
                 .map((appointment, index) => (
                   <tr key={appointment.id}>
                     <td>{index + 1}</td>
                     <td>{appointment.name}</td>
-                    <td>{new Date(appointment.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</td>
-                    <td>{new Date(`2000-01-01T${appointment.time}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td>
-                    <td className={statusBackground(appointment)}>{appointment.status}</td>
+                    <td>
+                      {new Date(appointment.date).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </td>
+                    <td>
+                      {new Date(
+                        `2000-01-01T${appointment.time}`
+                      ).toLocaleTimeString([], {
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </td>
+                    <td className={statusBackground(appointment)}>
+                      {appointment.status}
+                    </td>
                     <td>
                       {appointment.status.toLowerCase() !== "cancelled" ? (
                         <>
-                          <Button className="btn-sm mx-2" variant='danger' onClick={() => handleCancelAppointment(appointment.id, appointment)}>Cancel</Button>
-                          <Button className='btn-sm btn-primary' onClick={() => handleCompleted(appointment.id)}>Done</Button>
+                          <Button
+                            className="btn-sm mx-2"
+                            variant="danger"
+                            onClick={() =>
+                              handleCancelAppointment(
+                                appointment.id,
+                                appointment
+                              )
+                            }
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            className="btn-sm btn-primary"
+                            onClick={() => handleCompleted(appointment.id)}
+                          >
+                            Done
+                          </Button>
                         </>
                       ) : (
                         <h6>Expired</h6>
@@ -121,7 +170,6 @@ const AdminSchedule = () => {
                     </td>
                   </tr>
                 ))}
-
             </tbody>
           </Table>
         </Col>
