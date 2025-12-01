@@ -48,126 +48,123 @@ function Home() {
   return (
     <div className="py-5">
       <header>
-        <Container className="position-relative d-flex flex-column justify-content-start align-items-end pb-5 pe-4">
-          <Button
-            className="btn-primary fw-bold mt-2 animate__animated animate__pulse animate__infinite"
-            onClick={bookAppointment}
-          >
-            Book an Appointment
-          </Button>
-          <img
-            className="position-absolute end-0 top-45 "
-            width={60}
-            src={pointFinger}
-            alt=""
-          />
+        <Container className="position-relative pb-4">
+          <div className="d-flex justify-content-end align-items-center gap-3">
+            <Button
+              variant="primary"
+              className="fw-bold animate__animated animate__pulse animate__infinite"
+              onClick={bookAppointment}
+            >
+              Book an Appointment
+            </Button>
+            <img
+              src={pointFinger}
+              alt=""
+              width={48}
+              className="d-none d-md-block animate__animated animate__fadeIn"
+              style={{ objectFit: "contain" }}
+            />
+          </div>
         </Container>
       </header>
+
       <main>
-        <Container className="my-5 py-5">
-          <Row>
-            <Col
-              md={7}
-              className="d-flex flex-column justify-content-center align-items-center py-3"
-            >
-              <h1 className="display-4 fw-bold">Welcome to</h1>
-              <h1 className="display-5 fw-bold">Reno Smile Clinic</h1>
-              <p className="lead my-2">
+        <Container className="my-5">
+          <Row className="align-items-center gy-4">
+            <Col md={7}>
+              <h1 className="display-4 fw-bold mb-0">Welcome to</h1>
+              <h2 className="display-5 fw-bold mb-3">Reno Smile Clinic</h2>
+              <p className="lead mb-3">
                 We provide high-quality dental care for patients of all ages.
                 Our experienced dentists and staff are committed to making your
                 visit a comfortable and stress-free experience.
               </p>
-              <Button
-                className="btn-primary fw-bold"
-                onClick={() => navigate("/about")}
-              >
+              <Button variant="primary" onClick={() => navigate("/about")}>
                 Learn More
               </Button>
             </Col>
-            <Col
-              md={5}
-              className="d-flex justify-content-center align-items-center"
-            >
-              <img
-                className="rounded-circle animate__animated animate__backInLeft"
-                width={250}
-                src={Dentist}
-                alt="Dentist"
-              />
-              <img
-                className="rounded animate__animated animate__backInRight"
-                width={250}
-                src={dentalChair}
-                alt="Dentist"
-              />
+
+            <Col md={5} className="d-flex justify-content-center">
+              <div className="d-flex flex-column flex-sm-row gap-3 align-items-center">
+                <img
+                  src={Dentist}
+                  alt="Dentist"
+                  width={200}
+                  className="rounded-circle animate__animated animate__backInLeft"
+                />
+                <img
+                  src={dentalChair}
+                  alt="Dental Chair"
+                  width={200}
+                  className="rounded animate__animated animate__backInRight"
+                />
+              </div>
             </Col>
           </Row>
         </Container>
-        <div className="my-5 container-fluid">
-          <h1 className="text-center mb-5">Our Dental Services</h1>
-          <div className="d-flex overflow-auto">
-            <Row className="flex-nowrap text-dark p-5">
-              {services.map((service) => {
-                return (
-                  <Col key={service.id} lg={4} md={6} className="mb-4 w-25">
-                    <Card className="h-100 bg-light">
-                      <Card.Body>
-                        <h3 className="text-primary">{service.name}</h3>
-                        <h6 className="my-4">{service.description}</h6>
-                        <p className="">
-                          Price:{" "}
-                          <span className="fw-normal">{service.price} EG</span>
-                        </p>
-                        <Button
-                          variant="primary"
-                          onClick={() => bookServiceAppointment(service.name)}
-                        >
-                          Book this service
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                );
-              })}
+
+        <section className="py-5 bg-primary text-dark">
+          <Container>
+            <h2 className="text-center text-white mb-4">Our Dental Services</h2>
+
+            {/* عرض البطاقات: responsive بدون overflow horizontal غير مرغوب */}
+            <Row className="g-4">
+              {services.map((service) => (
+                <Col key={service.id} xs={12} sm={6} lg={4}>
+                  <Card className="h-100">
+                    <Card.Body>
+                      <h5 className="text-primary">{service.name}</h5>
+                      <p className="text-muted small mb-3">{service.description}</p>
+                      <p className="mb-3">
+                        Price: <span className="fw-normal">{service.price} EG</span>
+                      </p>
+                      <Button
+                        variant="primary"
+                        onClick={() => bookServiceAppointment(service.name)}
+                      >
+                        Book this service
+                      </Button>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
             </Row>
-          </div>
-        </div>
+          </Container>
+        </section>
       </main>
-      <Row className="mb-5">
-        <div>
-          <h2 className="text-primary mb-3">Visit Us</h2>
-          <p className="lead mb-4">
-            We are conveniently located in the heart of San Bartolome St., Brgy
-            4 Catbalogan City. Please feel free to contact us to schedule an
-            appointment or to ask any questions you may have.
-          </p>
-        </div>
-        <Col>
-          <LoadScript
-            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
-          >
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              center={center}
-              zoom={14}
-            >
-              <Marker position={center} />
-            </GoogleMap>
-          </LoadScript>
-        </Col>
-        <Col>
-          <p className="mt-3 lead display-6">
-            Abu Ubaid, <br />
-            Damanhour City, <br />
-            Beheira <br />
-            Phone: 01011347782
-          </p>
-        </Col>
-      </Row>
+
+      <Container className="my-5">
+        <Row className="g-4">
+          <Col lg={6}>
+            <h3 className="text-primary mb-3">Visit Us</h3>
+            <p className="lead mb-3">
+              We are conveniently located in the heart of San Bartolome St., Brgy 4
+              Catbalogan City. Please feel free to contact us to schedule an
+              appointment or to ask any questions you may have.
+            </p>
+
+            <p className="mt-3 lead">
+              Abu Ubaid, <br />
+              Damanhour City, <br />
+              Beheira <br />
+              Phone: 01011347782
+            </p>
+          </Col>
+
+          <Col lg={6}>
+            <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+              <GoogleMap mapContainerStyle={mapContainerStyle} center={center} zoom={14}>
+                <Marker position={center} />
+              </GoogleMap>
+            </LoadScript>
+          </Col>
+        </Row>
+      </Container>
+
       <Container className="mt-5">
         <Row className="justify-content-center">
           <Col md={8}>
-            <h1>Welcome to Our Private Dental Clinic</h1>
+            <h4 className="mb-3">Welcome to Our Private Dental Clinic</h4>
             <p>
               We are a state-of-the-art dental clinic located in the heart of
               the city. Our highly skilled team of dentists, hygienists, and
