@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 
 export const TimeScheduleContext = createContext();
 
@@ -18,10 +18,9 @@ export const TimeScheduleProvider = ({ children }) => {
           { day: "Wednesday", startTime: "09:00", endTime: "17:00" },
           { day: "Thursday", startTime: "09:00", endTime: "17:00" },
           { day: "Friday", startTime: "09:00", endTime: "17:00" },
-          { day: "Saturday", startTime: "09:00", endTime: "22:00" }
+          { day: "Saturday", startTime: "09:00", endTime: "22:00" },
         ];
   });
-
 
   // Save schedule to localStorage whenever it changes
   useEffect(() => {
@@ -33,7 +32,7 @@ export const TimeScheduleProvider = ({ children }) => {
   // Function to handle schedule updates
   const handleScheduleUpdate = (day, startTime, endTime) => {
     const updatedSchedule = [...schedule];
-    const dayIndex = updatedSchedule.findIndex(item => item.day === day);
+    const dayIndex = updatedSchedule.findIndex((item) => item.day === day);
 
     if (dayIndex !== -1) {
       updatedSchedule[dayIndex] = { day, startTime, endTime };
@@ -46,7 +45,7 @@ export const TimeScheduleProvider = ({ children }) => {
 
   // Function to handle setting a specific day as closed
   const handleDayClosed = (day) => {
-    const updatedSchedule = schedule.filter(item => item.day !== day);
+    const updatedSchedule = schedule.filter((item) => item.day !== day);
     setSchedule(updatedSchedule);
   };
 
@@ -56,7 +55,7 @@ export const TimeScheduleProvider = ({ children }) => {
         schedule,
         setSchedule,
         handleScheduleUpdate,
-        handleDayClosed
+        handleDayClosed,
       }}
     >
       {children}

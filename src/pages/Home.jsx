@@ -114,9 +114,12 @@ function Home() {
                   <Card className="h-100">
                     <Card.Body>
                       <h5 className="text-primary">{service.name}</h5>
-                      <p className="text-muted small mb-3">{service.description}</p>
+                      <p className="text-muted small mb-3">
+                        {service.description}
+                      </p>
                       <p className="mb-3">
-                        Price: <span className="fw-normal">{service.price} EG</span>
+                        Price:{" "}
+                        <span className="fw-normal">{service.price} EG</span>
                       </p>
                       <Button
                         variant="primary"
@@ -138,9 +141,9 @@ function Home() {
           <Col lg={6}>
             <h3 className="text-primary mb-3">Visit Us</h3>
             <p className="lead mb-3">
-              We are conveniently located in the heart of San Bartolome St., Brgy 4
-              Catbalogan City. Please feel free to contact us to schedule an
-              appointment or to ask any questions you may have.
+              We are conveniently located in the heart of San Bartolome St.,
+              Brgy 4 Catbalogan City. Please feel free to contact us to schedule
+              an appointment or to ask any questions you may have.
             </p>
 
             <p className="mt-3 lead">
@@ -152,8 +155,14 @@ function Home() {
           </Col>
 
           <Col lg={6}>
-            <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-              <GoogleMap mapContainerStyle={mapContainerStyle} center={center} zoom={14}>
+            <LoadScript
+              googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+            >
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={center}
+                zoom={14}
+              >
                 <Marker position={center} />
               </GoogleMap>
             </LoadScript>
